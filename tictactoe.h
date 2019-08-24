@@ -9,6 +9,3 @@ typedef struct {
 
 void xTurn(char *board), oTurn(char *board);
 int checkWin(char *board, char player), checkTie(char *board);
-
-char human = 'X';
-char computer = 'O';

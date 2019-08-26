@@ -3,6 +3,29 @@
 char human = 'X';
 char computer = 'O';
 
+int promptForInt(const char *prompt, int low, int high) {
+    int choice;
+
+    while (1) {
+        const int size = 5;
+        char buffer[size];
+        printf("%s\n\n", prompt);
+
+        if (fgets(buffer, size, stdin) == NULL) {
+            return 0;
+        }
+        if (sscanf(buffer, "%d", &choice) != 1 ) {
+            printf("\nPlease enter a valid number.\n\n");
+        }
+        else if (choice > high || choice < low) {
+            printf("\nNumber is not within the correct range.\n\n");
+        }
+        else break;
+    }
+
+    return choice;
+}
+
 void printBoard(char *board) {
     printf("\n\n");
     for (int i = 1; i < 10; i++) {
@@ -21,32 +44,19 @@ char *resetBoard(char *board) {
 }
 
 int user(char *board) {
-    int move = 0;
+    while (1) {
+        int move = promptForInt("Please enter a move (1 - 9):", 1, 9);
+        move--;
 
-    while (move == 0) {
-        printf("Enter a move (1 - 9):\n\n");
-        scanf("%d", &move);
-
-        if (move > 0 && move < 10) {
-            move--;
-
-            if (board[move] == '-') {
-                return move;
-            } else {
-                printf("Move taken.\n");
-                printBoard(board);
-
-                move = 0;
-            }
+        if (board[move] == '-') {
+            return move;
         } else {
-            printf("Invalid move.\n");
+            printf("Move taken.\n");
             printBoard(board);
-
-            move = 0;
         }
     }
 
-    return 10;
+    return -1;
 }
 
 int randomMove() {
@@ -168,11 +178,8 @@ int checkTie(char *board) {
 }
 
 void menu(char *board) {
-    int input = 0;
-
-    while (input == 0 ) {
-        printf("[1]: Play as X\n[2]: Play as O\n\n");
-        scanf("%d", &input);
+    while (1) {
+        int input = promptForInt("[1]: Play as X\n[2]: Play as O", 1, 2);
 
         board = resetBoard(board);
 
@@ -180,13 +187,14 @@ void menu(char *board) {
             human = 'X';
             computer = 'O';
             printBoard(board);
+            break;
         } else if (input == 2) {
             human = 'O';
             computer = 'X';
             printBoard(board);
+            break;
         } else {
             printf("Please enter a valid option\n\n");
-            input = 0;
         }
     }
 
